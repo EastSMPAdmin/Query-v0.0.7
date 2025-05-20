@@ -5,4 +5,5 @@ run:
 npm init -y
 npm install node-fetch
 deploy:
-push to Github and deploy to your chosen hosting service, i use netlify
+keep proxy.js in a /netlify/functions/proxy.js file structure
+deploy to your chosen hosting service, i use netlify
