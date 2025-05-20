@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Docs</title>
+</head>
+<body>
+  <h1>Proxy</h1>
+  <input type="text" id="urlInput" placeholder="Enter URL" size="50" />
+  <button id="searchBtn">Fetch</button>
+  <pre id="result" style="white-space: pre-wrap; border: 1px solid #ccc; padding: 10px; margin-top: 10px; max-height: 400px; overflow: auto;"></pre>
+
+  <script>
+    document.getElementById('searchBtn').onclick = async () => {
+      let url = document.getElementById('urlInput').value.trim();
+      if (!url) {
+        alert('Please enter a URL');
+        return;
+      }
+
+      // Add https:// if no protocol is present
+      if (!/^https?:\/\//i.test(url)) {
+        url = 'https://' + url;
+      }
+
+      const resultEl = document.getElementById('result');
+      resultEl.textContent = 'Loading...';
+
+      try {
+        const response = await fetch('/.netlify/functions/proxy', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          resultEl.textContent = 'Error: ' + (errorData.error || 'Unknown error');
+          return;
+        }
+
+        const text = await response.text();
+        resultEl.textContent = text;
+      } catch (err) {
+        resultEl.textContent = 'Fetch error: ' + err.message;
+      }
+    };
+  </script>
+</body>
+</html>

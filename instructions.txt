@@ -1,0 +1,8 @@
+install:
+node.js needs to be installed
+run:
+(inside project folder)
+npm init -y
+npm install node-fetch
+deploy:
+push to Github and deploy to your chosen hosting service, i use netlify
